@@ -8,6 +8,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,11 +41,13 @@ public class MainController {
         WebDriver wd = new FirefoxDriver(options);
         wd.get("http://test:test@svntest.com:443");
 
-        wd.get("http://svntest.com:443/!/#myrepo/history");
-        WebElement first = wd.findElement(By.id("history-list"));
+        wd.get(URL);
+        WebDriverWait wait = new WebDriverWait(wd, 3);
+        WebElement first = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("history-list")));
 
         model.addAttribute("contents", first.getAttribute("innerHTML"));
 
         return "main";
+
     }
 }
